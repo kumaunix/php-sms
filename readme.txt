@@ -2,11 +2,10 @@ Contribution by Hans Tobias Sopu
 email tobias.sopu@gmail.com
 https://github.com/kumaunix/
 
--- Please create table for SMS table. 
+This sms can show online and offline users, it has notifications.
+users can exchange text messages, pictures and pdfs as SMS.
 
-
-
--- Please read before create the user name also
+--Important !! Please read before create the user name also
 Your session usage in this system $_SESSION['id'] = id as auto_increment in the users table
 $_SESSION['user'] refers to the role of the users in the system, users, admin, manager, etc.
 $_SESSION['lname'] refers to the last name and $_SESSION['fname'] refers to first name of the user. If you have a different variable name please 
