@@ -5,9 +5,7 @@ if(!isset($_SESSION['token']))
 {
  $redirec_url = "url_here.php";	
  header("Location: $redirec_url");	
-}
-
-	
+}	
 ?>
 <html>
 <head>
@@ -20,18 +18,13 @@ if(!isset($_SESSION['token']))
 <center>
 <br /><br />
 <?php
-
-
-
 if (empty($_POST['act1'])){
 ?>
-
 <a href="index.php"><button>Return to Inbox</button></a>
 </center>
 <form action="" method="post">
 <ul class="form-style-1">
-   
-    
+       
     <li>
         <label>To<span class="required">*</span></label>
         <select name="rec" class="field-select" required="">
@@ -85,8 +78,6 @@ $url='index.php';
    echo '<META HTTP-EQUIV=REFRESH CONTENT="1; '.$url.'">';
    echo " <center> Sending Message to $to. . .</center> ";
 }
-//mysqli_close($conn);
-
 ?>
 
 	
