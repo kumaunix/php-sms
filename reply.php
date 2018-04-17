@@ -4,7 +4,7 @@ require_once 'dbconnect.php';
 
 if(!isset($_SESSION['token']))
 {
-header("Location: url.php");
+header("Location: url.php"); // Update to your redirect url
 }
 ?>
 <html>
