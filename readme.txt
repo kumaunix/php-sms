@@ -1,4 +1,4 @@
-Contribution by Tobias Sopu
+Contribution by Hans Tobias Sopu
 email tobias.sopu@gmail.com
 https://github.com/kumaunix/
 
