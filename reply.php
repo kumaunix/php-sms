@@ -1,276 +1,187 @@
 <?php
 session_start();
-require 'dbconnect.php';
-if(!isset($_SESSION['user']))
+require_once 'dbconnect.php';
+
+if(!isset($_SESSION['token']))
 {
- header("Location: ../unix/index.php");	
+header("Location: url.php");
 }
-if (empty($_POST['act1'])){	
-	$person_email = $_GET['send'];
-	
-	$view = ("Select * from sms where view='Unseen' and conv_id='".$_GET['conv_id']."' and receiver='".$_SESSION['mail']."'");
-	$view_query = mysqli_query($conn, $view) or die ("Query for View check :".mysqli_error($conn));
-	//$display = mysqli_fetch_assoc($view_query);
-	$row_view_affected = mysqli_num_rows($view_query);
-	if ($row_view_affected > 0){
-		$time = date_default_timezone_get();
-		$time_seen = date('Y-m-d-H:i:s',strtotime($time));
-		$view_update = ("UPDATE sms SET view='Seen', view_time='".$time_seen."'  where conv_id='".$_GET['conv_id']."' and receiver='".$_SESSION['mail']."' and view='Unseen' ");
-		$update_view = mysqli_query($conn, $view_update) or die ("Error updating view :".mysqli_error($conn));
-	}else{}
-
-if($_SESSION['mail']!=$_GET['send']){
-	$sender_name = $_GET['sendername'];	 
-}else{
-	$name_sql = ("Select sms.receiver, sms.id, users.lname,users.gname from sms INNER JOIN users On sms.receiver=users.email where sms.id='".$_GET['id']."'  ");
-	$name_query = mysqli_query($conn, $name_sql) or die ("error for selecting receiver name :".mysqli_error($conn));
-	$name_display = mysqli_fetch_assoc($name_query);
-	$sender_name = $name_display['gname'].' '.$name_display['lname'];
-}
-$subj = $_GET['subject'];
 ?>
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-	<meta charset="utf-8">
-	<title>Reply Mail | UNIX Mailroom</title>
+<html>
+<head>
+	<title>Inbox Mail | <?php echo $_SESSION['lname']; ?>, &nbsp;<?php echo $_SESSION['fname'];?></title>
 	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="../style.css">
-	<link rel="javascript/text" href="js/form.js" />
-<!-- Piwik -->
-<script type="text/javascript">
-  var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
- <?php
- if (isset($_SESSION['user'])) {
-	 echo sprintf("_paq.push(['setUserId', '%s']);", $_SESSION['mail']); 
-}?>
-  _paq.push(['setCustomUrl', '#url#']);
-  _paq.push(['seDocumentTitle', '#title#']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//unx.co.jp/piwik/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<script>
-	function func(a) {
-    var el;
-    if(a === 1) {
-        el = document.getElementById("order");
-    }
-    if(a === 2) {
-        el = document.getElementById("retrieve");
-    }
-    el.style.display = el.style.display === "none" ? "block" : "none";
-}
-
-function showValue() {
-    document.getElementById('range').innerHTML = this.value;
-}
-
-document.getElementById('f1').onclick = function () {
-    func(1);
-};
-document.getElementById('f2').onclick = function() {
-    func(2);
-};
-
-(function () {
-    var inputs = document.getElementsByTagName('input'),
-        i, l = inputs.length;
-    for (i = 0; i < l; i += 1) {
-        if (inputs[i].getAttribute('type') === 'range') {
-            inputs[i].onclick = showValue;
-        }
-    }
-}());
-</script>	
-<!-- End Piwik Code -->
-
-</head>	
-<body>
-<div id="chatdiv">
-<table class="data-table" width="500px">
+	<link rel="stylesheet" href="css/button4.css">
+	<link rel="stylesheet" href="slide.css">
 	
-		<caption class="title"><center><a href="index.php"><button>Inbox</button></a></center></caption>
+<script type="text/javascript">
+   var autoLoad = setInterval(
+   function ()
+   {
+      $('#chatdiv').load('reply.php').fadeIn("slow");
+   }, 10000); // refresh page every 10 seconds
+</script>
+</head>
+<body>
+<center>
+ <h3>Inbox Messages</h3>
+	<?
+	if ($_SESSION['user'] == 'admin' || $_SESSION['user'] == 'manager'){
+	?>
+	
+	<?
+	}else{
+		print "<center><a href='/puleset/user_index.php'><button class='button4'>User Setting</button></a></center>";
+	}
+	?>
+	<table class="data-table" width="600px">
+		<caption class="title"><font color="blue">SMS</font> - Inbox Messages</caption>
 		<thead>
-			<h4><center>Conversation with <? echo "<font color='red'>$sender_name</font>"; ?><br><p> Subject : <?php echo "<font color='blue'>$subj</font>"; ?> </p></center></h4>
 			<tr>
-				<td style="background-color: #cbe0e7"><? $pro=$_SESSION['profile'];?><center> <?php echo "<img src ='/unix/dept/img/profile/$pro' height=70 width=70 style='border-radius: 5px;'" ;  ?><br><br/><b>You</b></center></td> 
-		<td style="background-color: #cbe0e7" colspan="2">
-			<form method="post" action="" enctype="multipart/form-data"><br>
-				<textarea onkeypress="isTyping('true'); timer=5;" onkeyup="isTyping('false')" required name="textarea" id="textarea" cols="70" rows="5"></textarea><div id="Tobias Sopu"></div>
-				<input type="hidden" name="act1" value="run"/><br/>
-				<input type="submit" value="Reply" name="submit" /> <input type="file" name="myFile" accept=".jpeg,.png,.jpg,.pdf"/>
-			</form>			
-		</td>			
+				<th>sender</th>
+				<th>message  <?php echo"<a href='compose.php'><button>Compose</button></a>";?>  </th>
 			</tr>
 		</thead>
 		<tbody>
-<br /><br />
-<?php
-$conv_id = $_GET['conv_id'];
-$send = $_GET['send'];
-$sql = ("SELECT sms.*, users.profile_pic, users.gname, users.lname, users.email, users.profile_pic, users.status FROM sms INNER JOIN users On sms.sender=users.email WHERE conv_id='".$conv_id."'  order by time desc");
-$mysql = mysqli_query($conn, $sql) or die ("SELECT CHAT".mysqli_error($conn));
-while ($row = mysqli_fetch_array($mysql)){
-		$face = $row['profile_pic'];
-		$profile = "../unix/dept/img/profile/$face";
-		// set name of the person you chat with 	
-	    $name1 = $row['gname'];
-		$name2 = $row['lname'];
-		$to_email = $row['email'];
-		$sender = $row['sender'];
-		$to = $name1.' '.$name2;
-		if ($_SESSION['mail'] == $sender ){
-			$touser = "You";
-		}else{
-			$touser = $sender_name;
-		}
-		// set status if online or offline
-		$online = "../unix/img/online.png";
-		$offline = "../unix/img/offline.png";
-		$icon = $row['status'];
+		<?php
+		$sql3 = ("SELECT sms.*, users.email, users.lname, users.profile_pic, users.gname, users.status FROM sms 
+		INNER JOIN users ON sms.sender=users.email WHERE receiver='".$_SESSION['mail']."' and view='Unseen'  order by time desc");
+		$query3 = mysqli_query($conn, $sql3) or die ("ERROR CHAT QUERY".mysqli_error($conn));
+		while ($inbox3 = mysqli_fetch_array($query3)){
+			$id = $inbox3['id'];
+			$sender = $inbox3['sender'];
+			$message = $inbox3['message'];
+			$time = $inbox3['time'];
+			$subject = $inbox3['subject'];
+			$face = $inbox3['profile_pic'];
+			$profile = "../unix/dept/img/profile/$face";
+			$sender_1name = $inbox3['gname'];
+			$sender_2name = $inbox3['lname'];
+			$sender_email = $inbox3['email'];
+			$conv_id = $inbox3['conv_id'];
+			$number = mysqli_num_rows($query3);
+			$icon = $inbox3['status'];
+			$online = "../unix/img/online.png";
+			$offline = "../unix/img/offline.png";
+			if($icon == 1){
+				$status = "<img src='$online' height=11 width=11 style='position: relative; margin-right: 4px; top: -20px; right: -12px;'>"; 
+			}elseif ($icon == 0){
+				$status = "<img src='$offline' height=11 width=11 style='position: relative; margin-right: 4px; top: -20px; right: -12px;'>"; 
+			}
+			$time_now = date_default_timezone_get();
+			$now = new DateTime($time_now);
+			$ago = new DateTime($time);
+			$cal = $ago->diff($now);
+			$du = $cal->format("%D %H:%i:%s");
+			sscanf($du,"%d %d:%d:%d ", $day, $hr, $min, $sec);
 			
-		if($icon == 1){
-			$status = "<img src='$online' style='position: relative; margin-right: 4px; top: 4px;' height=15 width=15>"; 
-		}elseif ($icon == 0){
-			$status = "<img src='$offline' style='position: relative; margin-right: 4px; top: 4px;' height=15 width=15>"; 
+			if($day == 1){
+				$a = "$day day ago";
+			}elseif($day > 1){
+				$a = "$day days ago";	
+			}elseif (($day == 0) && ($hr == 1)){
+				$a = "$hr hr ago";
+			}elseif (($day == 0) && ($hr > 1)){
+				$a = "$hr hrs ago";	
+			}elseif (($day == 0) && ($hr == 0) && ($min == 1)){
+				$a = "$min min ago";
+			}elseif (($day == 0) && ($hr == 0) && ($min > 1)){
+				$a = "$min mins ago";	
+			}elseif (($day == 0) && ($hr == 0) && ($min == 0) && ($sec >0)){
+				$a = "$sec secs ago";
+			}		
+			
+			if ($sender_email == $_SESSION['mail']){
+				$sender_fullname = "You";
+			}else{   
+		    $sender_fullname = $sender_1name.' '.$sender_2name;
+		    } 
+			$link = "reply.php?conv_id=$conv_id&send=$sender&sendername=$sender_fullname&id=$id";
+			
+			$view = $inbox3['view'];
+	
+		echo '<tr>'; //print "<td style='background-color:#55b4d4'>
+				print "<td style='background-color:#55b4d4'><center><br><img src='$profile' height=40 width=40 style='border-radius: 5px;'><br>$status<br><b>$sender_fullname</b></center></td>";
+					print "<td style='background-color:#55b4d4'><p align='left'><b><font color='yellow'>New Mail ($number)</font></b><br>$message  </p><font size='2.5' color='black'> Time : $a</font>
+					<br><a href='$link'><button class='button4'>View</button></td>";	
+		echo '</tr>';
 		}
-		// display messages
-		$message = $row['message'];
+		$sql = ("SELECT sms.*, users.email, users.lname, users.profile_pic, users.gname, users.status FROM sms 
+		INNER JOIN users ON sms.sender=users.email WHERE subject!='' and (sender='".$_SESSION['mail']."' or receiver='".$_SESSION['mail']."')  order by time desc");
+		$query = mysqli_query($conn, $sql) or die ("ERROR CHAT QUERY".mysqli_error($conn));
 		
-	// time of chat
-	$time = $row['time'];	
-	$time_now = date_default_timezone_get();
-	$view = $row['view'];
-	$now = new DateTime($time_now);
-	$ago = new DateTime($time);
-	$cal = $ago->diff($now);
-	$du = $cal->format("%D %H:%i:%s");
-	sscanf($du,"%d %d:%d:%d ", $day, $hr, $min, $sec);
-
-	if (($day == 0) && ($hr == 0) && ($min == 0) && ($sec >0)){
-		$a = "$sec secs ago";
-	}elseif (($day == 0) && ($hr == 0) && ($min == 1)){
-		$a = "$min min ago";	
-	}elseif (($day == 0) && ($hr == 0) && ($min > 1)){
-		$a = "$min mins ago";
-	}elseif (($day == 0) && ($hr == 1)){
-		$a = "$hr hr $min mins ago";	
-	}elseif (($day == 0) && ($hr > 1)){
-		$a = "$hr hrs $min mins ago";
-	}elseif(($day == 1)&& ($hr == 0)){
-		$a = "$day day ago";
-	}elseif(($day == 1)&& ($hr > 0)){
-		$a = "$day day $hr hrs ago";	
-	}elseif($day > 1){
-		$a = "$day days $hr hrs ago";	
-	}	
-   /// when the message was viewed 
-    $time_view = $row['view_time'];	
-	$time_now = date_default_timezone_get();
+		while ($inbox = mysqli_fetch_array($query)){
+			$id = $inbox['id'];
+			$sender = $inbox['sender'];
+			$receiver = $inbox['receiver'];
+			$message = $inbox['message'];
+			$time = $inbox['time'];
+			$subject = $inbox['subject'];
+			$face = $inbox['profile_pic'];
+			$profile = "../unix/dept/img/profile/$face";
+			$sender_1name = $inbox['gname'];
+			$sender_2name = $inbox['lname'];
+			$sender_email = $inbox['email'];
+			$conv_id = $inbox['conv_id'];
+			$number = mysqli_num_rows($query);
+			$icon = $inbox['status'];
+			$online = "../unix/img/online.png";
+			$offline = "../unix/img/offline.png";
+			if($icon == 1){
+				$status = "<img src='$online' height=12 width=12 style='position: relative; margin-right: -10px; top: -16px; right: -12px;'>"; 
+			}elseif ($icon == 0){
+				$status = "<img src='$offline' height=12 width=12 style='position: relative; margin-right: -10px; top: -16px; right: -12px;'>"; 
+			}
+			$time_now = date_default_timezone_get();
+			$now = new DateTime($time_now);
+			$ago = new DateTime($time);
+			$cal = $ago->diff($now);
+			$du = $cal->format("%D %H:%i:%s");
+			sscanf($du,"%d %d:%d:%d ", $day, $hr, $min, $sec);
+			$num = mysqli_num_rows($query);
+			if($day == 1){
+				$a = "$day day ago";
+			}elseif($day > 1){
+				$a = "$day days ago";	
+			}elseif (($day == 0) && ($hr == 1)){
+				$a = "$hr hr ago";
+			}elseif (($day == 0) && ($hr > 1)){
+				$a = "$hr hrs ago";	
+			}elseif (($day == 0) && ($hr == 0) && ($min == 1)){
+				$a = "$min min ago";
+			}elseif (($day == 0) && ($hr == 0) && ($min > 1)){
+				$a = "$min mins ago";	
+			}elseif (($day == 0) && ($hr == 0) && ($min == 0) && ($sec >0)){
+				$a = "$sec secs ago";
+			}		
+			/// determine whether you sent the mail 
+			if ($_SESSION['mail'] == $sender_email ){
+				$sender_fullname = "You";
+			}else{
+			    $sender_fullname = $sender_1name.' '.$sender_2name;
+		    }
+			
+			$link = "reply.php?subject=$subject&conv_id=$conv_id&send=$sender&sendername=$sender_fullname&id=$id";
+			
+			$view = $inbox['view'];
 	
-	$current_time = new DateTime($time_now);
-	$time_viewed = new DateTime($time_view);
-	$calculation = $time_viewed->diff($current_time);
-	$results = $calculation->format("%D %H:%i:%s");
-	sscanf($results,"%d %d:%d:%d ", $day1, $hr1, $min1, $sec1);
-	
-	if (($day1 == 0) && ($hr1 == 0) && ($min1 == 0) && ($sec1 >0)){
-		$b = ": $sec1 secs ago";
-	}elseif (($day1 == 0) && ($hr1 == 0) && ($min1 == 1)){
-		$b = ": $min1 min ago";	
-	}elseif (($day1 == 0) && ($hr1 == 0) && ($min1 > 1)){
-		$b = ": $min1 mins ago";
-	}elseif (($day1 == 0) && ($hr1 == 1)){
-		$b = ": $hr1 hr $min1 mins ago";	
-	}elseif (($day1 == 0) && ($hr1 > 1)){
-		$b = ": $hr1 hrs $min1 mins ago";
-	}elseif($day1 == 1){
-		$b = ": $day1 day ago";
-	}elseif(($day1 == 1) && ($hr1 == 1)){
-		$b = ": $day1 day $hr hr ago";
-	}elseif(($day1 == 1) && ($hr1 > 1)){
-		$b = ": $day1 day $hr hrs ago";			
-	}elseif($day1 > 1) {
-		$b = ": $day1 days $hr1 hrs ago";	
-	}	
-   //check if message been viewed
-   $view = $row['view'];
-   $attachment = $row['file'];
-   $file_show = "attachments/$attachment";
-if(strpos($attachment, '.jpg')==TRUE || strpos($attachment, '.jpeg')==TRUE || strpos($attachment, '.png')==TRUE || strpos($attachment, '.PNG')==TRUE
-|| strpos($attachment, '.JPG')==TRUE || strpos($attachment, '.JPEG')==TRUE){
-	$display = "<br><a href='$file_show' target='_blank'>
-	<img src='$file_show' height='50%' width='50%' style='border-radius: 5px;'><font color='orange'></a></font>";
-}elseif($attachment!=''){  
-	//$file_show = "attachments/$attachment";
-	$display = "<br><a href='$file_show' target='_blank'>
-	<img src='img/attachment.png' height=15 width=20 style='border-radius: 5px;'><font color='orange'> </a>$attachment</font>";
-}elseif($attachment==''){
-	$display='';
-} 
-	echo "<tr>";	
-		echo "<td><center><img src='$profile' height=50 width=50 style='border-radius: 5px;'></center></td>";
-		echo "<td><p align='left'>$status &nbsp;<b> $touser</b> &nbsp;<font size='2' color='#cccccc'>$a</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$message <br>
-		$display</p><font size='2' color='#cccccc'>$view  $b</font></td>";
-    echo "</tr>";
-}    
-}elseif (!empty($_POST['act1'])){
-
-	$start_button = $_POST['act1'];	
-	$myfile = $_POST['myFile'];
-	$sender = $_SESSION['mail'];
-	$receiver = $_GET['send'];
-	$reply = $_POST['textarea'];
-	$conv_id = $_GET['conv_id'];
-	$time_now = date_default_timezone_get();
-	$time_send = date('Y-m-d H:i:s',strtotime($time_now));
-//////////////////////////////////////////////////////
-$name= $_FILES['myFile']['name'];
-$tmp_name= $_FILES['myFile']['tmp_name'];
-$submitbutton= $_POST['submit'];
-$position= strpos($name, "."); 
-$fileextension= substr($name, $position + 1);
-$fileextension= strtolower($fileextension);
-
-if (isset($name)) {
-$path= 'attachments/';
-if (!empty($name)){
-if (move_uploaded_file($tmp_name, $path.$name)) {
-//echo 'Uploaded!';
-}
-}
-}
-
-///////////////////////////////////////////////////////
-$data =("INSERT INTO sms (`sender`, `receiver`, `message`, `conv_id`, `view`, `time`,`file`) VALUES('$sender','$receiver', '$reply','$conv_id', 'Unseen', '$time_send','$name') ");
-$sql = mysqli_query($conn, $data)or die ("ERROR :".mysqli_error($conn));
-echo '<meta http-equiv="refresh" content="0.2" >';
-echo " <center> Sending Message to $receiver. . .</center> ";
-}
-?>
-</tbody>
-</table>
-
-</div>
-<script>
-var chatdiv = document.getElementById('chatdiv');
-setInterval(
-    // Here is where to do things like dom manipulation
-    function() {
-        chatdiv.innerHTML = new ('reply.php') ;
-    },
-
-    // Here is where you set the interval asuming I want to update every 1 second
-    1000
-);
-</script>
-</body>		
+			
+		echo '<tr>'; //print "<td style='background-color:#55b4d4'>
+				print "<td><center><br><img src='$profile' height=50 width=50 style='border-radius: 50px;'><br>$status<br><b>$sender_fullname</b></center></td>";
+					print "<td><p align='left'><font color='#cccc'>Thread subject : </font><b>$subject</b><br>$message  </p><font size='2.5' color='black'> Time : $a</font>
+					<br><a href='$link'><button class='button4'>View | Reply</button></td>";	
+		echo '</tr>';
+		}
+//	}			
+		?>
+		</tbody>
+		<tfoot>
+			<tr>
+				<th colspan="1">MESSAGES</th>
+				<th><? echo $num?></th>
+			</tr>
+		</tfoot>
+	</table>
+</center>
+  </body>
 </html>
