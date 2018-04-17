@@ -67,5 +67,5 @@ CREATE TABLE IF NOT EXISTS `users` (
   `sick_day_available` int(10) NOT NULL,
   `sick_day_used` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=59 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
