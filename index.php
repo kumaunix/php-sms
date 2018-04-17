@@ -2,9 +2,9 @@
 session_start();
 require_once 'dbconnect.php';
 
-if(!isset($_SESSION['user']))
+if(!isset($_SESSION['token']))
 {
-header("Location: /puleset/index.php");
+header("Location: url.php");
 }
 ?>
 <html>
@@ -12,26 +12,8 @@ header("Location: /puleset/index.php");
 	<title>Inbox Mail | <?php echo $_SESSION['lname']; ?>, &nbsp;<?php echo $_SESSION['fname'];?></title>
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="css/button4.css">
-	<!--<link rel="stylesheet" href="slide.css">
-	<!-- Piwik -->
-<script type="text/javascript">
-  var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
- <?php
- if (isset($_SESSION['user'])) {
-	 echo sprintf("_paq.push(['setUserId', '%s']);", $_SESSION['mail']); 
-}?>
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//unx.co.jp/piwik/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Piwik Code -->
+	<link rel="stylesheet" href="slide.css">
+	
 <script type="text/javascript">
    var autoLoad = setInterval(
    function ()
@@ -46,10 +28,10 @@ header("Location: /puleset/index.php");
 	<?
 	if ($_SESSION['user'] == 'admin' || $_SESSION['user'] == 'manager'){
 	?>
-	<center><a href="../puleset/index.php"><button class="button4">Admin Setting</button></a></center>
+	
 	<?
 	}else{
-		print "<center><a href='/puleset/user_index.php'><button>User Setting</button></a></center>";
+		print "<center><a href='/puleset/user_index.php'><button class='button4'>User Setting</button></a></center>";
 	}
 	?>
 	<table class="data-table" width="600px">
@@ -82,9 +64,9 @@ header("Location: /puleset/index.php");
 			$online = "../unix/img/online.png";
 			$offline = "../unix/img/offline.png";
 			if($icon == 1){
-				$status = "<img src='$online' height=15 width=15>"; 
+				$status = "<img src='$online' height=11 width=11 style='position: relative; margin-right: 4px; top: -20px; right: -12px;'>"; 
 			}elseif ($icon == 0){
-				$status = "<img src='$offline' height=15 width=15>"; 
+				$status = "<img src='$offline' height=11 width=11 style='position: relative; margin-right: 4px; top: -20px; right: -12px;'>"; 
 			}
 			$time_now = date_default_timezone_get();
 			$now = new DateTime($time_now);
@@ -146,9 +128,9 @@ header("Location: /puleset/index.php");
 			$online = "../unix/img/online.png";
 			$offline = "../unix/img/offline.png";
 			if($icon == 1){
-				$status = "<img src='$online' height=15 width=15>"; 
+				$status = "<img src='$online' height=12 width=12 style='position: relative; margin-right: -10px; top: -16px; right: -12px;'>"; 
 			}elseif ($icon == 0){
-				$status = "<img src='$offline' height=15 width=15>"; 
+				$status = "<img src='$offline' height=12 width=12 style='position: relative; margin-right: -10px; top: -16px; right: -12px;'>"; 
 			}
 			$time_now = date_default_timezone_get();
 			$now = new DateTime($time_now);
@@ -185,7 +167,7 @@ header("Location: /puleset/index.php");
 	
 			
 		echo '<tr>'; //print "<td style='background-color:#55b4d4'>
-				print "<td><center><br><img src='$profile' height=40 width=40 style='border-radius: 5px;'><br>$status<br><b>$sender_fullname</b></center></td>";
+				print "<td><center><br><img src='$profile' height=50 width=50 style='border-radius: 50px;'><br>$status<br><b>$sender_fullname</b></center></td>";
 					print "<td><p align='left'><font color='#cccc'>Thread subject : </font><b>$subject</b><br>$message  </p><font size='2.5' color='black'> Time : $a</font>
 					<br><a href='$link'><button class='button4'>View | Reply</button></td>";	
 		echo '</tr>';
