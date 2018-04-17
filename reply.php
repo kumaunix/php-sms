@@ -28,10 +28,10 @@ header("Location: url.php"); // Update to your redirect url
 	<?
 	if ($_SESSION['user'] == 'admin' || $_SESSION['user'] == 'manager'){
 	?>
-	
+		print "<center><a href='/user_index.php'><button class='button4'>User Setting</button></a></center>"; // update your url to the admin home page
 	<?
 	}else{
-		print "<center><a href='/puleset/user_index.php'><button class='button4'>User Setting</button></a></center>";
+		print "<center><a href='/user_index.php'><button class='button4'>User Setting</button></a></center>"; // update your url to the user home page
 	}
 	?>
 	<table class="data-table" width="600px">
@@ -54,15 +54,15 @@ header("Location: url.php"); // Update to your redirect url
 			$time = $inbox3['time'];
 			$subject = $inbox3['subject'];
 			$face = $inbox3['profile_pic'];
-			$profile = "../unix/dept/img/profile/$face";
+			$profile = "/img/profile/$face"; // Update to where your profile picture is stored.
 			$sender_1name = $inbox3['gname'];
 			$sender_2name = $inbox3['lname'];
 			$sender_email = $inbox3['email'];
 			$conv_id = $inbox3['conv_id'];
 			$number = mysqli_num_rows($query3);
 			$icon = $inbox3['status'];
-			$online = "../unix/img/online.png";
-			$offline = "../unix/img/offline.png";
+			$online = "/img/online.png";   // Update to where you online light is stored so as your offline next line
+			$offline = "/img/offline.png";
 			if($icon == 1){
 				$status = "<img src='$online' height=11 width=11 style='position: relative; margin-right: 4px; top: -20px; right: -12px;'>"; 
 			}elseif ($icon == 0){
@@ -118,7 +118,7 @@ header("Location: url.php"); // Update to your redirect url
 			$time = $inbox['time'];
 			$subject = $inbox['subject'];
 			$face = $inbox['profile_pic'];
-			$profile = "../unix/dept/img/profile/$face";
+			$profile = "profile/$face"; // Update to where your profile picture folder is located
 			$sender_1name = $inbox['gname'];
 			$sender_2name = $inbox['lname'];
 			$sender_email = $inbox['email'];
