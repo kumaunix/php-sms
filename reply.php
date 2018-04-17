@@ -61,8 +61,8 @@ header("Location: url.php"); // Update to your redirect url
 			$conv_id = $inbox3['conv_id'];
 			$number = mysqli_num_rows($query3);
 			$icon = $inbox3['status'];
-			$online = "/img/online.png";   // Update to where you online light is stored so as your offline next line
-			$offline = "/img/offline.png";
+			$online = "img/online.png";   // Update to where you online light is stored so as your offline next line
+			$offline = "img/offline.png";
 			if($icon == 1){
 				$status = "<img src='$online' height=11 width=11 style='position: relative; margin-right: 4px; top: -20px; right: -12px;'>"; 
 			}elseif ($icon == 0){
@@ -125,8 +125,8 @@ header("Location: url.php"); // Update to your redirect url
 			$conv_id = $inbox['conv_id'];
 			$number = mysqli_num_rows($query);
 			$icon = $inbox['status'];
-			$online = "../unix/img/online.png";
-			$offline = "../unix/img/offline.png";
+			$online = "img/online.png";
+			$offline = "img/offline.png";
 			if($icon == 1){
 				$status = "<img src='$online' height=12 width=12 style='position: relative; margin-right: -10px; top: -16px; right: -12px;'>"; 
 			}elseif ($icon == 0){
