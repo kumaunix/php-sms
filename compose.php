@@ -1,9 +1,10 @@
 <?php
 session_start();
 require 'dbconnect.php';
-if(!isset($_SESSION['user']))
+if(!isset($_SESSION['token']))
 {
- header("Location: ../unix/index.php");	
+ $redirec_url = "url_here.php";	
+ header("Location: $redirec_url");	
 }
 
 	
@@ -13,27 +14,7 @@ if(!isset($_SESSION['user']))
 	<title>Compose Mail | <?php echo $_SESSION['lname']; ?>, &nbsp;<?php echo $_SESSION['fname'];?></title>
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="css/compose.css">
-<!-- Piwik -->
-<script type="text/javascript">
-  var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
- <?php
- if (isset($_SESSION['user'])) {
-	 echo sprintf("_paq.push(['setUserId', '%s']);", $_SESSION['fname'].' '.$_SESSION['lname']); 
-}?>
-  _paq.push(['setCustomUrl', '#url#']);
-  _paq.push(['seDocumentTitle', '#title#']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//unx.co.jp/piwik/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Piwik Code -->
+
 </head>	
 <body>
 <center>
