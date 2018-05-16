@@ -256,7 +256,11 @@ if(strpos($attachment, '.jpg')==TRUE || strpos($attachment, '.jpeg')==TRUE || st
 	$display='';
 } 
 	echo "<tr>";	
-		echo "<td><center><img src='$profile' height=50 width=50 style='border-radius: 50px;'><br>$status</center></td>";
+		echo "<td><center><img src='$profile' height=50 width=50 style='border-radius: 50px;'><br>$status<br><a href='delete.php?id=$id'>";
+		if($_SESSION['user']=='manager'){
+			echo "<button style='color:red; opacity:0.5;hover:opacity:1;'>X</button></a>";
+		}
+		echo "</center></td>";
 		echo "<td><p align='left'><b> $touser</b> &nbsp;<font size='2' color='#cccccc'>$a</font><br>$message <br>
 		$display</p><font size='2' color='#cccccc'>$view  $b</font></td>";
     echo "</tr>";
