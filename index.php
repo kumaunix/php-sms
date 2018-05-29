@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'dbconnect.php';
-
+// Put security layer here !!
 if(!isset($_SESSION['token']))
 {
 header("Location: url.php");
