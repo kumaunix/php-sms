@@ -23,13 +23,24 @@ $position= strpos($name, ".");
 $fileextension= substr($name, $position + 1);
 $fileextension= strtolower($fileextension);
 
+if (!empty($name)) {
+$filename = "attachments/$name";
+if(file_exists($filename)){
+	$time = date_default_timezone_get();
+	$date = date('Y_m_d.H_i_s', strtotime($time));
+	$name = $date.'_'.$_FILES['myFile']['name'];
+}
+
 if (isset($name)) {
-$path= 'attachments/';
-if (!empty($name)){
-if (move_uploaded_file($tmp_name, $path.$name)) {
-//echo 'Uploaded!';
+	$path= 'attachments/';
+		if (!empty($name)){
+			if (move_uploaded_file($tmp_name, $path.$name)) {
+			//echo 'Uploaded!';
+			}
+		}
+
 }
-}
+
 }
 
 ///////////////////////////////////////////////////////
